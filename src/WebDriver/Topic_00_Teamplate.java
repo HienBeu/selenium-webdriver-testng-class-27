@@ -10,7 +10,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class Topic_04_Check_Environment {
+public class Topic_00_Teamplate {
 	WebDriver driver;
 	String projectPath = System.getProperty("user.dir");
 	String osName = System.getProperty("os.name");
@@ -25,29 +25,24 @@ public class Topic_04_Check_Environment {
 		
 		driver = new FirefoxDriver();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-		driver.get("https://www.facebook.com/");
+	}
+
+
+	
+	@Test
+	public void TC_01_ID() {
+
 	}
 
 	@Test
-	public void TC_01_ValidateCurrentUrl() {
-		// Login Page Url matching
-		String loginPageUrl = driver.getCurrentUrl();
-		Assert.assertEquals(loginPageUrl, "https://www.facebook.com/");
+	public void TC_02_() {
+		
 	}
 
 	@Test
-	public void TC_02_ValidatePageTitle() {
-		// Login Page title
-		String loginPageTitle = driver.getTitle();
-		Assert.assertEquals(loginPageTitle, "Facebook – log in or sign up");
+	public void TC_03_() {
+		
 	}
-
-	@Test
-	public void TC_03_LoginFormDisplayed() {
-		// Login form displayed
-		Assert.assertTrue(driver.findElement(By.xpath("//form[@data-testid='royal_login_form']")).isDisplayed());
-	}
-
 	@AfterClass
 	public void afterClass() {
 		driver.quit();

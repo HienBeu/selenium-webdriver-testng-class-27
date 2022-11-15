@@ -15,6 +15,10 @@ public class Topic_21_WebElement_Commands {
 	String projectPath = System.getProperty("user.dir");
 	String osName = System.getProperty("os.name");
 	
+	//By thì chưa đi tìm element ngay
+	By emailTextbox = By.id("Email");
+	By passwordTextbox = By.id("Pass");
+	
 	@BeforeClass
 	public void beforeClass() {
 		if (osName.contains("Mac OS")) {
@@ -30,17 +34,20 @@ public class Topic_21_WebElement_Commands {
 
 	
 	@Test
-	public void TC_01_ID() {
+	public void TC_01_WebElement() {
 
 	}
 
 	@Test
-	public void TC_02_() {
-		
+	public void TC_02_Register() {
+		driver.get("");
+		//Đi tìm element 
+		driver.findElement(emailTextbox).sendKeys("");
+		driver.findElement(passwordTextbox).sendKeys("");
 	}
 
 	@Test
-	public void TC_03_() {
+	public void TC_03_Login() {
 		
 	}
 	@AfterClass

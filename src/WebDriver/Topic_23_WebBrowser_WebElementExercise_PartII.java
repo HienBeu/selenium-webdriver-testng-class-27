@@ -1,5 +1,6 @@
 package WebDriver;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -12,8 +13,11 @@ import org.testng.annotations.Test;
 
 public class Topic_23_WebBrowser_WebElementExercise_PartII {
 	WebDriver driver;
+	Random rand;
 	String projectPath = System.getProperty("user.dir");
 	String osName = System.getProperty("os.name");
+	String firstname,lastname,fullname,emailaddress,passworD,confirmpassword;				
+	
 	
 	By emailTextbox = By.id("mail");
 	By radiocheckbox = By.id("under_18");
@@ -34,7 +38,15 @@ public class Topic_23_WebBrowser_WebElementExercise_PartII {
 	By passwordInput = By.id("new_password");
 	By buttonSignUp = By.id("create-account-enabled");
 	
+	By emailAddress = By.id("email");
+	By PasswordTextbox = By.id("pass");
+	By loginButton = By.xpath("//div[@class='buttons-set']//span[text()='Login']");
 	
+	By FirstName = By.id("firstname");			
+	By LastName = By.id("lastname");			
+	By EmailAddress = By.id("email_address");			
+	By PassWord = By.id("password");			
+	By ConfirmPassword = By.id("confirmation");
 	
 	
 	@BeforeClass
@@ -44,10 +56,18 @@ public class Topic_23_WebBrowser_WebElementExercise_PartII {
 		} else {
 			System.setProperty("webdriver.gecko.driver", projectPath + "\\browserDrivers\\geckodriver.exe");
 		}
-		
+		rand = new Random();
 		driver = new FirefoxDriver();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
+		
+		firstname = "Daoa";
+		lastname = "b";
+		fullname = firstname + " " + lastname;
+		emailaddress = "nguyenhienit" + rand.nextInt(9999) + "@gmail.com";
+		passworD = "123456";
+		confirmpassword = "123456";
+		
 	}
 
 
@@ -170,8 +190,8 @@ public class Topic_23_WebBrowser_WebElementExercise_PartII {
 	
 		
 	}
-	@Test
-	public void TC_04_() {
+	//@Test
+	public void TC_04_Register_funtion_at_MailChimp() {
 		driver.get("https://login.mailchimp.com/signup/");
 		driver.findElement(By.cssSelector("#email")).sendKeys("nguyenhienit94@gmail.com");
 		driver.findElement(passwordInput).sendKeys("123");
@@ -226,6 +246,93 @@ public class Topic_23_WebBrowser_WebElementExercise_PartII {
 		Assert.assertFalse(driver.findElement(By.xpath("//li[@class='number-char completed']")).isDisplayed());
 		Assert.assertFalse(driver.findElement(By.xpath("//li[@class='special-char completed']")).isDisplayed());
 		Assert.assertFalse(driver.findElement(By.xpath("//li[@class='8-char completed']")).isDisplayed());
+	}
+	//@Test
+	public void TC_05_login_with_empty_email_and_password() {
+		driver.get("http://live.techpanda.org/");
+		driver.findElement(By.cssSelector("div[class='footer'] a[title='My Account']")).click();
+		sleepInSecond(3);
+		driver.findElement(By.id("send2")).click();
+		Assert.assertEquals(driver.findElement(By.id("advice-required-entry-email")).getText(), "This is a required field.");
+		Assert.assertEquals(driver.findElement(By.id("advice-required-entry-pass")).getText(), "This is a required field.");
+		
+	}
+	//@Test
+	public void TC_06_login_with_invalid_email() {
+		driver.get("http://live.techpanda.org/");
+		driver.findElement(By.cssSelector("div[class='footer'] a[title='My Account']")).click();
+		sleepInSecond(3);
+		driver.findElement(emailAddress).sendKeys("123434234@12312.123123");
+		driver.findElement(PasswordTextbox).sendKeys("123456");
+		driver.findElement(loginButton).click();
+		sleepInSecond(3);
+		Assert.assertEquals(driver.findElement(By.id("advice-validate-email-email")).getText(), "Please enter a valid email address. For example johndoe@domain.com.");
+	}
+	//@Test
+	public void TC_07_login_with_password_low_6_character() {
+		driver.get("http://live.techpanda.org/");
+		driver.findElement(By.cssSelector("div[class='footer'] a[title='My Account']")).click();
+		sleepInSecond(3);
+		driver.findElement(emailAddress).sendKeys("automation@gmail.com");
+		driver.findElement(PasswordTextbox).sendKeys("123");
+		driver.findElement(loginButton).click();
+		sleepInSecond(3);
+		Assert.assertEquals(driver.findElement(By.id("advice-validate-password-pass")).getText(), "Please enter 6 or more characters without leading or trailing spaces.");
+		
+	}
+	
+	//@Test
+	public void TC_08_login_with_incorrect_emai_password() {
+		driver.get("http://live.techpanda.org/");
+		driver.findElement(By.cssSelector("div[class='footer'] a[title='My Account']")).click();
+		sleepInSecond(3);
+		driver.findElement(emailAddress).sendKeys("automation@gmail.com");
+		driver.findElement(PasswordTextbox).sendKeys("123123123");
+		driver.findElement(loginButton).click();
+		sleepInSecond(3);
+		Assert.assertEquals(driver.findElement(By.xpath("//ul[@class='messages']//span")).getText(), "Invalid login or password.");
+		
+	}
+	@Test
+	public void TC_09_Create_a_new_account() {
+		driver.get("http://live.techpanda.org/");
+		driver.findElement(By.cssSelector("div[class='footer'] a[title='My Account']")).click();
+		sleepInSecond(3);
+		driver.findElement(By.xpath("//span[text()='Create an Account']")).click();
+		driver.findElement(FirstName).sendKeys(firstname);
+		driver.findElement(LastName).sendKeys(lastname);
+		driver.findElement(EmailAddress).sendKeys(emailaddress);
+		driver.findElement(PassWord).sendKeys(passworD);
+		driver.findElement(ConfirmPassword).sendKeys(confirmpassword);
+		
+		driver.findElement(By.xpath("//button[@title='Register']//span")).click();
+		sleepInSecond(3);
+		
+		Assert.assertEquals(driver.findElement(By.xpath("//li[@class='success-msg']")).getText(), "Thank you for registering with Main Website Store.");
+		
+		String contactinformation = driver.findElement(By.xpath("//h3[text()='Contact Information']/parent::div/following-sibling::div")).getText();					
+		Assert.assertTrue(contactinformation.contains(fullname));			
+		Assert.assertTrue(contactinformation.contains(emailaddress));						
+		
+		driver.findElement(By.xpath("//div[@class='account-cart-wrapper']//span[text()='Account']")).click();
+		sleepInSecond(3);
+		
+		driver.findElement(By.xpath("//a[@title='Log Out']")).click();
+		sleepInSecond(3);
+		
+		Assert.assertTrue(driver.findElement(By.xpath("//img[@src='http://live.techpanda.org/media/wysiwyg/test/logo.png']")).isDisplayed());
+	}
+	@Test
+	public void TC_10_Login_with_valid_Email_and_passwword() {
+		driver.findElement(By.cssSelector("div[class='footer'] a[title='My Account']")).click();
+		sleepInSecond(3);
+		driver.findElement(emailAddress).sendKeys(emailaddress);
+		driver.findElement(PasswordTextbox).sendKeys(passworD);
+		driver.findElement(By.id("send2")).click();
+		String contactinformation = driver.findElement(By.xpath("//h3[text()='Contact Information']/parent::div/following-sibling::div")).getText();					
+		Assert.assertTrue(contactinformation.contains(fullname));			
+		Assert.assertTrue(contactinformation.contains(emailaddress));	
+		
 	}
 	public void sleepInSecond(long timeInSecond) {
 		try {

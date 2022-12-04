@@ -120,7 +120,7 @@ public class Topic_25_Handle_Default_Dropdown {
 		Assert.assertTrue(driver.findElement(By.cssSelector("li.city-state-zip")).getText().contains(City));
 		Assert.assertTrue(driver.findElement(By.cssSelector("li.city-state-zip")).getText().contains(Zip));
 		Assert.assertTrue(driver.findElement(By.cssSelector("li.country")).getText().contains(Country));
-		//Assert.assertEquals(new Select(driver.findElement(By.name("Address.CountryId"))).getFirstSelectedOption().getText(), Country);
+		
 		
 	}
 
